@@ -1,0 +1,36 @@
+name: Continuous Integration Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm Package Manager
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node Runtime Environment
+        uses: actions/setup-node@v4
+        with:
+          node-cache: 'pnpm'
+
+      - name: Install Project Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Code Syntax Lint Verification
+        run: pnpm lint
+
+      - name: Type System Verification
+        run: pnpm tsc --noEmit
+
+      - name: Execute Logic Unit Tests
+        run: pnpm test
