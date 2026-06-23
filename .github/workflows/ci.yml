@@ -13,20 +13,18 @@ jobs:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
 
-      - name: Install pnpm Package Manager
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-
       - name: Setup Node Runtime Environment
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
 
-      - name: Install Project Dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install and Cache pnpm Package Manager
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
 
       - name: Code Syntax Lint Verification
         run: pnpm lint
