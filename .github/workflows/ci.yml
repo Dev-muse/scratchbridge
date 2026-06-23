@@ -18,13 +18,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install and Cache pnpm Package Manager
+      - name: Install pnpm Package Manager
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile]
+
+      - name: Install Project Dependencies
+        run: pnpm install
 
       - name: Code Syntax Lint Verification
         run: pnpm lint
