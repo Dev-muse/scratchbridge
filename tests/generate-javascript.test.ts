@@ -7,7 +7,7 @@ describe("JavaScript Code Generator", () => {
   it("should generate console.log with numeric literals", () => {
     const ast: ProgramNode = {
       type: "program",
-      body: [{ type: "print", value: { type: "literal", value: 42 } }]
+      body: [{ type: "print", value: { type: "literal", value: 42 } }],
     };
     expect(generateJavaScript(ast)).toBe("console.log(42);\n");
   });
@@ -15,7 +15,7 @@ describe("JavaScript Code Generator", () => {
   it("should format string literals properly inside double quotes", () => {
     const ast: ProgramNode = {
       type: "program",
-      body: [{ type: "print", value: { type: "literal", value: "hello" } }]
+      body: [{ type: "print", value: { type: "literal", value: "hello" } }],
     };
     expect(generateJavaScript(ast)).toBe('console.log("hello");\n');
   });
@@ -23,7 +23,7 @@ describe("JavaScript Code Generator", () => {
   it("should translate booleans to lowercase JavaScript syntax tokens", () => {
     const ast: ProgramNode = {
       type: "program",
-      body: [{ type: "print", value: { type: "literal", value: true } }]
+      body: [{ type: "print", value: { type: "literal", value: true } }],
     };
     expect(generateJavaScript(ast)).toBe("console.log(true);\n");
   });
@@ -31,7 +31,7 @@ describe("JavaScript Code Generator", () => {
   it("should handle reading values using identifiers", () => {
     const ast: ProgramNode = {
       type: "program",
-      body: [{ type: "print", value: { type: "variable", name: "score" } }]
+      body: [{ type: "print", value: { type: "variable", name: "score" } }],
     };
     expect(generateJavaScript(ast)).toBe("console.log(score);\n");
   });
@@ -39,7 +39,13 @@ describe("JavaScript Code Generator", () => {
   it("should properly declare variables using let keywords", () => {
     const ast: ProgramNode = {
       type: "program",
-      body: [{ type: "assign", name: "highScore", value: { type: "literal", value: 100 } }]
+      body: [
+        {
+          type: "assign",
+          name: "highScore",
+          value: { type: "literal", value: 100 },
+        },
+      ],
     };
     expect(generateJavaScript(ast)).toBe("let highScore = 100;\n");
   });
@@ -54,10 +60,10 @@ describe("JavaScript Code Generator", () => {
             type: "binaryop",
             operator: "+",
             left: { type: "literal", value: 10 },
-            right: { type: "variable", name: "bonus" }
-          }
-        }
-      ]
+            right: { type: "variable", name: "bonus" },
+          },
+        },
+      ],
     };
     expect(generateJavaScript(ast)).toBe("console.log((10 + bonus));\n");
   });
@@ -72,10 +78,10 @@ describe("JavaScript Code Generator", () => {
             type: "binaryop",
             operator: "==",
             left: { type: "variable", name: "counter" },
-            right: { type: "literal", value: 0 }
-          }
-        }
-      ]
+            right: { type: "literal", value: 0 },
+          },
+        },
+      ],
     };
     expect(generateJavaScript(ast)).toBe("console.log((counter == 0));\n");
   });
@@ -83,7 +89,9 @@ describe("JavaScript Code Generator", () => {
   it("should create empty if statement structures cleanly without crash loops", () => {
     const ast: ProgramNode = {
       type: "program",
-      body: [{ type: "if", condition: { type: "literal", value: true }, body: [] }]
+      body: [
+        { type: "if", condition: { type: "literal", value: true }, body: [] },
+      ],
     };
     expect(generateJavaScript(ast)).toBe("if (true) {\n}\n");
   });
@@ -95,11 +103,15 @@ describe("JavaScript Code Generator", () => {
         {
           type: "if",
           condition: { type: "literal", value: true },
-          body: [{ type: "print", value: { type: "literal", value: "working" } }]
-        }
-      ]
+          body: [
+            { type: "print", value: { type: "literal", value: "working" } },
+          ],
+        },
+      ],
     };
-    expect(generateJavaScript(ast)).toBe('if (true) {\n    console.log("working");\n}\n');
+    expect(generateJavaScript(ast)).toBe(
+      'if (true) {\n    console.log("working");\n}\n',
+    );
   });
 
   it("should construct dual branching if/else configurations safely", () => {
@@ -110,11 +122,13 @@ describe("JavaScript Code Generator", () => {
           type: "ifelse",
           condition: { type: "variable", name: "isValid" },
           body: [{ type: "print", value: { type: "literal", value: 1 } }],
-          elseBody: [{ type: "print", value: { type: "literal", value: 0 } }]
-        }
-      ]
+          elseBody: [{ type: "print", value: { type: "literal", value: 0 } }],
+        },
+      ],
     };
-    expect(generateJavaScript(ast)).toBe("if (isValid) {\n    console.log(1);\n} else {\n    console.log(0);\n}\n");
+    expect(generateJavaScript(ast)).toBe(
+      "if (isValid) {\n    console.log(1);\n} else {\n    console.log(0);\n}\n",
+    );
   });
 
   it("should produce a standard for-loop implementation for repeat blocks", () => {
@@ -124,11 +138,16 @@ describe("JavaScript Code Generator", () => {
         {
           type: "repeat",
           count: { type: "literal", value: 5 },
-          body: [{ type: "print", value: { type: "literal", value: "looping" } }]
-        }
-      ]
+          body: [
+            { type: "print", value: { type: "literal", value: "looping" } },
+          ],
+        },
+      ],
     };
-    expect(generateJavaScript(ast)).toBe('for (let i0 = 0; i0 < 5; i0++) {\n    console.log("looping");\n}\n');
+    // Changed i0 to i
+    expect(generateJavaScript(ast)).toBe(
+      'for (let i = 0; i < 5; i++) {\n    console.log("looping");\n}\n',
+    );
   });
 
   it("should safely output standard while loops", () => {
@@ -138,11 +157,19 @@ describe("JavaScript Code Generator", () => {
         {
           type: "while",
           condition: { type: "variable", name: "running" },
-          body: [{ type: "assign", name: "running", value: { type: "literal", value: false } }]
-        }
-      ]
+          body: [
+            {
+              type: "assign",
+              name: "running",
+              value: { type: "literal", value: false },
+            },
+          ],
+        },
+      ],
     };
-    expect(generateJavaScript(ast)).toBe("while (running) {\n    let running = false;\n}\n");
+    expect(generateJavaScript(ast)).toBe(
+      "while (running) {\n    let running = false;\n}\n",
+    );
   });
 
   it("should support nested programs safely without emitting duplicates", () => {
@@ -151,9 +178,11 @@ describe("JavaScript Code Generator", () => {
       body: [
         {
           type: "program",
-          body: [{ type: "print", value: { type: "literal", value: "nested" } }]
-        }
-      ]
+          body: [
+            { type: "print", value: { type: "literal", value: "nested" } },
+          ],
+        },
+      ],
     };
     expect(generateJavaScript(ast)).toBe('console.log("nested");\n');
   });
@@ -169,24 +198,27 @@ describe("JavaScript Code Generator", () => {
             {
               type: "repeat",
               count: { type: "literal", value: 3 },
-              body: [{ type: "print", value: { type: "literal", value: "inner" } }]
-            }
-          ]
-        }
-      ]
+              body: [
+                { type: "print", value: { type: "literal", value: "inner" } },
+              ],
+            },
+          ],
+        },
+      ],
     };
+    // Outer loop uses i, inner loop uses i1
     const expected = [
-      "for (let i0 = 0; i0 < 2; i0++) {",
+      "for (let i = 0; i < 2; i++) {",
       "    for (let i1 = 0; i1 < 3; i1++) {",
       '        console.log("inner");',
       "    }",
       "}",
-      ""
+      "",
     ].join("\n");
     expect(generateJavaScript(ast)).toBe(expected);
   });
 
-  it("should process deep combined logical layouts smoothly", () => {
+ it("should process deep combined logical layouts smoothly", () => {
     const ast: ProgramNode = {
       type: "program",
       body: [
@@ -214,9 +246,10 @@ describe("JavaScript Code Generator", () => {
       ]
     };
 
+    // Changed i0 to i
     const expected = [
       "let x = 5;",
-      "for (let i0 = 0; i0 < 3; i0++) {",
+      "for (let i = 0; i < 3; i++) {",
       "    if ((x > 2)) {",
       "        console.log(x);",
       "    }",

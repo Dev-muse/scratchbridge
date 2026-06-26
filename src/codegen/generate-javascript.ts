@@ -11,22 +11,27 @@ function walkNodes(nodes: ASTNode[], depth: number): string {
   for (const node of nodes) {
     switch (node.type) {
       case "print":
-        code += indent(depth) + `console.log(${generateExpression(node.value)});\n`;
+        code +=
+          indent(depth) + `console.log(${generateExpression(node.value)});\n`;
         break;
 
       case "assign":
         // Using let for block-scoped variable declarations as per our language goals
-        code += indent(depth) + `let ${node.name} = ${generateExpression(node.value)};\n`;
+        code +=
+          indent(depth) +
+          `let ${node.name} = ${generateExpression(node.value)};\n`;
         break;
 
       case "if":
-        code += indent(depth) + `if (${generateExpression(node.condition)}) {\n`;
+        code +=
+          indent(depth) + `if (${generateExpression(node.condition)}) {\n`;
         code += walkNodes(node.body, depth + 1);
         code += indent(depth) + "}\n";
         break;
 
       case "ifelse":
-        code += indent(depth) + `if (${generateExpression(node.condition)}) {\n`;
+        code +=
+          indent(depth) + `if (${generateExpression(node.condition)}) {\n`;
         code += walkNodes(node.body, depth + 1);
         code += indent(depth) + "} else {\n";
         code += walkNodes(node.elseBody, depth + 1);
@@ -34,17 +39,20 @@ function walkNodes(nodes: ASTNode[], depth: number): string {
         break;
 
       case "repeat": {
-        // Unique loop counter variable name based on depth to avoid scoping collision in nested loops
-        const loopVar = `i${depth}`;
+        // Use simple 'i' at the top level, otherwise append the depth number
+        const loopVar = depth === 0 ? "i" : `i${depth}`;
         const countStr = generateExpression(node.count);
-        code += indent(depth) + `for (let ${loopVar} = 0; ${loopVar} < ${countStr}; ${loopVar}++) {\n`;
+        code +=
+          indent(depth) +
+          `for (let ${loopVar} = 0; ${loopVar} < ${countStr}; ${loopVar}++) {\n`;
         code += walkNodes(node.body, depth + 1);
         code += indent(depth) + "}\n";
         break;
       }
 
       case "while":
-        code += indent(depth) + `while (${generateExpression(node.condition)}) {\n`;
+        code +=
+          indent(depth) + `while (${generateExpression(node.condition)}) {\n`;
         code += walkNodes(node.body, depth + 1);
         code += indent(depth) + "}\n";
         break;
