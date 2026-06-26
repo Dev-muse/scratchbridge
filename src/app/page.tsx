@@ -208,7 +208,7 @@ export default function WorkspacePage() {
                           <input
                             type="number"
                             value={block.numParam ?? ""}
-                            onChange={(e) => updateBlock(block.id, { numParam: parseInt(e.target.value) })}
+                            onChange={(e) => updateBlock(block.id, { numParam: parseInt(e.target.value) || 0 })}
                             className="bg-slate-950 text-slate-100 text-sm px-2 py-1 rounded-md border border-slate-800 focus:outline-none focus:border-indigo-400 w-20"
                           />
                           <span className="text-xs text-slate-400/60 font-medium ml-2">times ➔ [print warning]</span>
