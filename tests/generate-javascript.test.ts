@@ -99,7 +99,7 @@ describe("JavaScript Code Generator", () => {
         }
       ]
     };
-    expect(generateJavaScript(ast)).toBe('if (true) {\n  console.log("working");\n}\n');
+    expect(generateJavaScript(ast)).toBe('if (true) {\n    console.log("working");\n}\n');
   });
 
   it("should construct dual branching if/else configurations safely", () => {
@@ -114,7 +114,7 @@ describe("JavaScript Code Generator", () => {
         }
       ]
     };
-    expect(generateJavaScript(ast)).toBe("if (isValid) {\n  console.log(1);\n} else {\n  console.log(0);\n}\n");
+    expect(generateJavaScript(ast)).toBe("if (isValid) {\n    console.log(1);\n} else {\n    console.log(0);\n}\n");
   });
 
   it("should produce a standard for-loop implementation for repeat blocks", () => {
@@ -128,7 +128,7 @@ describe("JavaScript Code Generator", () => {
         }
       ]
     };
-    expect(generateJavaScript(ast)).toBe('for (let i0 = 0; i0 < 5; i0++) {\n  console.log("looping");\n}\n');
+    expect(generateJavaScript(ast)).toBe('for (let i0 = 0; i0 < 5; i0++) {\n    console.log("looping");\n}\n');
   });
 
   it("should safely output standard while loops", () => {
@@ -142,7 +142,7 @@ describe("JavaScript Code Generator", () => {
         }
       ]
     };
-    expect(generateJavaScript(ast)).toBe("while (running) {\n  let running = false;\n}\n");
+    expect(generateJavaScript(ast)).toBe("while (running) {\n    let running = false;\n}\n");
   });
 
   it("should support nested programs safely without emitting duplicates", () => {
@@ -177,9 +177,9 @@ describe("JavaScript Code Generator", () => {
     };
     const expected = [
       "for (let i0 = 0; i0 < 2; i0++) {",
-      "  for (let i1 = 0; i1 < 3; i1++) {",
-      '    console.log("inner");',
-      "  }",
+      "    for (let i1 = 0; i1 < 3; i1++) {",
+      '        console.log("inner");',
+      "    }",
       "}",
       ""
     ].join("\n");
@@ -217,9 +217,9 @@ describe("JavaScript Code Generator", () => {
     const expected = [
       "let x = 5;",
       "for (let i0 = 0; i0 < 3; i0++) {",
-      "  if ((x > 2)) {",
-      "    console.log(x);",
-      "  }",
+      "    if ((x > 2)) {",
+      "        console.log(x);",
+      "    }",
       "}",
       ""
     ].join("\n");
