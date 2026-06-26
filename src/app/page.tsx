@@ -1,4 +1,3 @@
-// src/app/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -7,8 +6,7 @@ import { generatePython } from "../codegen/generate-python";
 import { generateJavaScript } from "../codegen/generate-javascript";
 import { validateAST } from "../ast/validate-ast";
 
-// Cleaned up UI Block type: Removed the "while" string literal stub
-interface UIBlock {
+ interface UIBlock {
   id: string;
   type: "print" | "assign" | "repeat";
   stringParam?: string; 
