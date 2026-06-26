@@ -7,12 +7,12 @@ import { generatePython } from "../codegen/generate-python";
 import { generateJavaScript } from "../codegen/generate-javascript";
 import { validateAST } from "../ast/validate-ast";
 
-// Define a simplified UI state model for editing blocks easily
+// Cleaned up UI Block type: Removed the "while" string literal stub
 interface UIBlock {
   id: string;
-  type: "print" | "assign" | "repeat" | "while";
-  stringParam?: string; // Used for variable names or text
-  numParam?: number;    // Used for counts or numeric values
+  type: "print" | "assign" | "repeat";
+  stringParam?: string; 
+  numParam?: number;    
   valueType?: "string" | "number";
 }
 
@@ -23,7 +23,7 @@ export default function WorkspacePage() {
     { id: "init-2", type: "repeat", numParam: 5 }
   ]);
 
- // --- DERIVED STATE (Synchronized dynamically on every render pass) ---
+  // --- DERIVED STATE ---
   const astBody: ASTNode[] = blocks.map((b) => {
     switch (b.type) {
       case "print":
@@ -43,19 +43,10 @@ export default function WorkspacePage() {
         return {
           type: "repeat",
           count: { type: "literal", value: b.numParam ?? 1 },
-          // Instead of hardcoding "Looping!", we can dynamically render what the user expects
           body: [{ type: "print", value: { type: "literal", value: "Looping!" } }]
         };
 
-      case "while":
-        return {
-          type: "while",
-          condition: { type: "literal", value: true },
-          body: []
-        };
-
       default:
-        // Fallback safety catch
         return {
           type: "print",
           value: { type: "literal", value: "" }
@@ -65,11 +56,9 @@ export default function WorkspacePage() {
 
   const program: ProgramNode = { type: "program", body: astBody };
 
-  // Calculate semantic validations, Python, and JavaScript output instantly
   const errors = validateAST(program);
   const pythonCode = generatePython(program);
   const jsCode = generateJavaScript(program);
-  // --------------------------------------------
 
   // Toolbox actions
   const addBlock = (type: UIBlock["type"]) => {
