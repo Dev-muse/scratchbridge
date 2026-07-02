@@ -108,4 +108,3 @@ The validator (`validate-ast.ts`) catches these errors at edit-time:
 ## License
 
 MIT
-test shh
